@@ -62,6 +62,124 @@ const chartConfig = {
 } satisfies ChartConfig
 
 
+const mockDataGraph = [
+  {
+    "id": 296,
+    "Sala UPS": 145,
+    "hours": "02:28 PM",
+    "date": "2025-11-19",
+    "Sala de Operaciones 1": 201,
+    "Sala técnica": 93,
+    "Sala de Operaciones 2": 110,
+    "Sala de tomografía": 240,
+    "Sala de Operaciones 3": 171,
+    "Sala de Operaciones 4": 82,
+    "Subestación eléctrica": 150
+  },
+  {
+    "id": 297,
+    "Sala UPS": 138,
+    "hours": "02:58 PM",
+    "date": "2025-11-19",
+    "Sala de Operaciones 1": 195,
+    "Sala técnica": 98,
+    "Sala de Operaciones 2": 115,
+    "Sala de tomografía": 235,
+    "Sala de Operaciones 3": 165,
+    "Sala de Operaciones 4": 88,
+    "Subestación eléctrica": 155
+  },
+  {
+    "id": 298,
+    "Sala UPS": 152,
+    "hours": "03:28 PM",
+    "date": "2025-11-19",
+    "Sala de Operaciones 1": 205,
+    "Sala técnica": 89,
+    "Sala de Operaciones 2": 105,
+    "Sala de tomografía": 245,
+    "Sala de Operaciones 3": 175,
+    "Sala de Operaciones 4": 78,
+    "Subestación eléctrica": 145
+  },
+  {
+    "id": 299,
+    "Sala UPS": 149,
+    "hours": "03:58 PM",
+    "date": "2025-11-19",
+    "Sala de Operaciones 1": 203,
+    "Sala técnica": 91,
+    "Sala de Operaciones 2": 112,
+    "Sala de tomografía": 242,
+    "Sala de Operaciones 3": 173,
+    "Sala de Operaciones 4": 85,
+    "Subestación eléctrica": 153
+  },
+  {
+    "id": 300,
+    "Sala UPS": 140,
+    "hours": "04:28 PM",
+    "date": "2025-11-19",
+    "Sala de Operaciones 1": 198,
+    "Sala técnica": 95,
+    "Sala de Operaciones 2": 108,
+    "Sala de tomografía": 238,
+    "Sala de Operaciones 3": 168,
+    "Sala de Operaciones 4": 90,
+    "Subestación eléctrica": 148
+  },
+  {
+    "id": 301,
+    "Sala UPS": 147,
+    "hours": "04:58 PM",
+    "date": "2025-11-19",
+    "Sala de Operaciones 1": 204,
+    "Sala técnica": 92,
+    "Sala de Operaciones 2": 114,
+    "Sala de tomografía": 244,
+    "Sala de Operaciones 3": 174,
+    "Sala de Operaciones 4": 80,
+    "Subestación eléctrica": 151
+  },
+  {
+    "id": 302,
+    "Sala UPS": 142,
+    "hours": "05:28 PM",
+    "date": "2025-11-19",
+    "Sala de Operaciones 1": 200,
+    "Sala técnica": 96,
+    "Sala de Operaciones 2": 107,
+    "Sala de tomografía": 236,
+    "Sala de Operaciones 3": 167,
+    "Sala de Operaciones 4": 87,
+    "Subestación eléctrica": 154
+  }
+]
+
+const salaKeys = [
+  "Sala UPS",
+  "Sala de Operaciones 1",
+  "Sala técnica",
+  "Sala de Operaciones 2",
+  "Sala de tomografía",
+  "Sala de Operaciones 3",
+  "Sala de Operaciones 4",
+  "Subestación eléctrica"
+];
+
+// 2. Definición opcional de colores para cada línea
+const colors = [
+  "#8884d8", // Púrpura
+  "#82ca9d", // Verde
+  "#ffc658", // Amarillo
+  "#d0ed57", // Lima
+  "#a4de6c", // Verde claro
+  "#d0ed57", // Lima (repetición)
+  "#83a6ed", // Azul claro
+  "#ff7300"  // Naranja
+];
+
+
 export default function ChartComponent({ results, generalRoomData, indicator, unit }: ChartComponentProps) {
 
   const { indicators_pollutants: indicators, thresholds } = generalRoomData
@@ -106,7 +224,7 @@ export default function ChartComponent({ results, generalRoomData, indicator, un
           <ChartContainer config={chartConfig}>
             <LineChart
               accessibilityLayer
-              data={results}
+              data={mockDataGraph}
               margin={{ top: 20, right: 0, left: 0, bottom: 0 }}
             >
               <CartesianGrid vertical={false} />
@@ -143,13 +261,18 @@ export default function ChartComponent({ results, generalRoomData, indicator, un
                   />
                 ))
               }
-              <Line
-                dataKey="value"
-                type="natural"
-                stroke="var(--color-desktop)"
-                strokeWidth={2}
-                dot={false}
-              />
+              {salaKeys.map((key, index) => (
+                <Line
+                  key={key} // Es crucial usar el 'key' único
+                  dataKey={key} // La clave de los datos para la línea
+                  type="natural"
+                  stroke={colors[index % colors.length]} // Asignamos un color
+                  strokeWidth={2}
+                  dot={false}
+                />
+              ))}
+
+
             </LineChart>
           </ChartContainer>
         )

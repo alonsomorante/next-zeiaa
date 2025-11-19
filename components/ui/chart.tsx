@@ -4,7 +4,7 @@ import * as React from "react"
 import * as RechartsPrimitive from "recharts"
 
 import { cn } from "@/lib/utils"
-import { UNIT_CONVERTED, Unit } from "@/app/utils/formatter"
+import { Unit } from "@/app/utils/formatter"
 
 // Format: { THEME_NAME: CSS_SELECTOR }
 const THEMES = { light: "", dark: ".dark" } as const
@@ -142,6 +142,7 @@ const ChartTooltipContent = React.forwardRef<
       }
 
       const [item] = payload
+
       const key = `${labelKey || item.dataKey || item.name || "value"}`
       const itemConfig = getPayloadConfigFromPayload(config, item, key)
       const value =
@@ -244,7 +245,7 @@ const ChartTooltipContent = React.forwardRef<
                       </div>
                       {item.value && (
                         <span className="font-mono font-medium tabular-nums text-foreground pl-2">
-                          {item.value.toLocaleString()} {UNIT_CONVERTED[indicatorUnit]}
+                          {item.value.toLocaleString()} {indicatorUnit}
                         </span>
                       )}
                     </div>
