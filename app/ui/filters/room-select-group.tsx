@@ -22,7 +22,7 @@ export default function ToggleSelectGroup({ roomsId }: { roomsId?: Room[] }) {
   };
 
   return (
-    <div className="relative w-full max-w-xs p-6">
+    <div className="relative">
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
           <Button

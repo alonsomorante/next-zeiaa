@@ -12,6 +12,45 @@ export const useRoom = create<RoomState>((set) => ({
   changeRoom: (roomId: string) => set({ roomId }),
 }))
 
+export interface RoomFilter {
+  id: string;
+  name: string;
+}
+
+export interface RoomFilterState {
+  selectedRooms: RoomFilter[];
+  setSelectedRooms: (rooms: RoomFilter[]) => void;
+  addRoom: (room: RoomFilter) => void;
+  removeRoom: (roomId: string) => void;
+  clearRooms: () => void;
+  isRoomSelected: (roomId: string) => boolean;
+  getSelectedRoomIds: () => string[];
+}
+
+export const useRoomFilter = create<RoomFilterState>((set, get) => ({
+  selectedRooms: [],
+
+  setSelectedRooms: (rooms) => set({ selectedRooms: rooms }),
+
+  addRoom: (room) => set((state) => ({
+    selectedRooms: [...state.selectedRooms, room]
+  })),
+
+  removeRoom: (roomId) => set((state) => ({
+    selectedRooms: state.selectedRooms.filter(room => room.id !== roomId)
+  })),
+
+  clearRooms: () => set({ selectedRooms: [] }),
+
+  isRoomSelected: (roomId) => {
+    return get().selectedRooms.some(room => room.id === roomId);
+  },
+
+  getSelectedRoomIds: () => {
+    return get().selectedRooms.map(room => room.id);
+  },
+}));
+
 export const capitalizeFirstLetter = (str: string) => {
   if (!str) return str; // Verifica si la cadena está vacía
   return str.charAt(0).toUpperCase() + str.slice(1)

@@ -62,99 +62,271 @@ const chartConfig = {
 } satisfies ChartConfig
 
 
-const mockDataGraph = [
-  {
-    "id": 296,
-    "Sala UPS": 145,
-    "hours": "02:28 PM",
-    "date": "2025-11-19",
-    "Sala de Operaciones 1": 201,
-    "Sala técnica": 93,
-    "Sala de Operaciones 2": 110,
-    "Sala de tomografía": 240,
-    "Sala de Operaciones 3": 171,
-    "Sala de Operaciones 4": 82,
-    "Subestación eléctrica": 150
-  },
-  {
-    "id": 297,
-    "Sala UPS": 138,
-    "hours": "02:58 PM",
-    "date": "2025-11-19",
-    "Sala de Operaciones 1": 195,
-    "Sala técnica": 98,
-    "Sala de Operaciones 2": 115,
-    "Sala de tomografía": 235,
-    "Sala de Operaciones 3": 165,
-    "Sala de Operaciones 4": 88,
-    "Subestación eléctrica": 155
-  },
-  {
-    "id": 298,
-    "Sala UPS": 152,
-    "hours": "03:28 PM",
-    "date": "2025-11-19",
-    "Sala de Operaciones 1": 205,
-    "Sala técnica": 89,
-    "Sala de Operaciones 2": 105,
-    "Sala de tomografía": 245,
-    "Sala de Operaciones 3": 175,
-    "Sala de Operaciones 4": 78,
-    "Subestación eléctrica": 145
-  },
-  {
-    "id": 299,
-    "Sala UPS": 149,
-    "hours": "03:58 PM",
-    "date": "2025-11-19",
-    "Sala de Operaciones 1": 203,
-    "Sala técnica": 91,
-    "Sala de Operaciones 2": 112,
-    "Sala de tomografía": 242,
-    "Sala de Operaciones 3": 173,
-    "Sala de Operaciones 4": 85,
-    "Subestación eléctrica": 153
-  },
-  {
-    "id": 300,
-    "Sala UPS": 140,
-    "hours": "04:28 PM",
-    "date": "2025-11-19",
-    "Sala de Operaciones 1": 198,
-    "Sala técnica": 95,
-    "Sala de Operaciones 2": 108,
-    "Sala de tomografía": 238,
-    "Sala de Operaciones 3": 168,
-    "Sala de Operaciones 4": 90,
-    "Subestación eléctrica": 148
-  },
-  {
-    "id": 301,
-    "Sala UPS": 147,
-    "hours": "04:58 PM",
-    "date": "2025-11-19",
-    "Sala de Operaciones 1": 204,
-    "Sala técnica": 92,
-    "Sala de Operaciones 2": 114,
-    "Sala de tomografía": 244,
-    "Sala de Operaciones 3": 174,
-    "Sala de Operaciones 4": 80,
-    "Subestación eléctrica": 151
-  },
-  {
-    "id": 302,
-    "Sala UPS": 142,
-    "hours": "05:28 PM",
-    "date": "2025-11-19",
-    "Sala de Operaciones 1": 200,
-    "Sala técnica": 96,
-    "Sala de Operaciones 2": 107,
-    "Sala de tomografía": 236,
-    "Sala de Operaciones 3": 167,
-    "Sala de Operaciones 4": 87,
-    "Subestación eléctrica": 154
-  }
-]
+const mockData = {
+  // Datos de Dióxido de Carbono (500 a 2800 ppm)
+  CO2: [
+    {
+      "hours": "02:28 PM",
+      "date": "2025-11-19",
+      "Sala UPS": 750, // Bajo
+      "Sala de Operaciones 1": 1500, // Medio
+      "Sala técnica": 2200, // Muy Alto
+      "Sala de Operaciones 2": 1300,
+      "Sala de tomografía": 900,
+      "Sala de Operaciones 3": 1700,
+      "Sala de Operaciones 4": 2500, // Máximo
+      "Subestación eléctrica": 600 // Mínimo
+    },
+    {
+      "hours": "02:58 PM",
+      "date": "2025-11-19",
+      "Sala UPS": 800,
+      "Sala de Operaciones 1": 1700,
+      "Sala técnica": 1900, // Baja
+      "Sala de Operaciones 2": 1100, // Baja
+      "Sala de tomografía": 1250, // Sube
+      "Sala de Operaciones 3": 2000,
+      "Sala de Operaciones 4": 2100, // Baja
+      "Subestación eléctrica": 720
+    },
+    {
+      "hours": "03:28 PM",
+      "date": "2025-11-19",
+      "Sala UPS": 950,
+      "Sala de Operaciones 1": 1950,
+      "Sala técnica": 2500, // Sube mucho
+      "Sala de Operaciones 2": 900, // Baja mucho
+      "Sala de tomografía": 1500,
+      "Sala de Operaciones 3": 1850, // Baja
+      "Sala de Operaciones 4": 1800, // Baja
+      "Subestación eléctrica": 550 // Baja
+    },
+    {
+      "hours": "03:58 PM",
+      "date": "2025-11-19",
+      "Sala UPS": 1100,
+      "Sala de Operaciones 1": 1600, // Baja
+      "Sala técnica": 2800, // Pico
+      "Sala de Operaciones 2": 1050,
+      "Sala de tomografía": 1900, // Sube mucho
+      "Sala de Operaciones 3": 1550, // Baja
+      "Sala de Operaciones 4": 2050, // Sube
+      "Subestación eléctrica": 650
+    },
+    {
+      "hours": "04:28 PM",
+      "date": "2025-11-19",
+      "Sala UPS": 1300,
+      "Sala de Operaciones 1": 1250, // Baja
+      "Sala técnica": 2600, // Baja
+      "Sala de Operaciones 2": 1400, // Sube
+      "Sala de tomografía": 1450, // Baja
+      "Sala de Operaciones 3": 1800, // Sube
+      "Sala de Operaciones 4": 2300,
+      "Subestación eléctrica": 780
+    },
+    {
+      "hours": "04:58 PM",
+      "date": "2025-11-19",
+      "Sala UPS": 1550,
+      "Sala de Operaciones 1": 1000, // Baja
+      "Sala técnica": 2100, // Baja
+      "Sala de Operaciones 2": 1650,
+      "Sala de tomografía": 1000, // Baja mucho
+      "Sala de Operaciones 3": 1950,
+      "Sala de Operaciones 4": 2800, // Pico
+      "Subestación eléctrica": 850
+    },
+    {
+      "hours": "05:28 PM",
+      "date": "2025-11-19",
+      "Sala UPS": 1800, // Sube
+      "Sala de Operaciones 1": 850, // Baja
+      "Sala técnica": 1800,
+      "Sala de Operaciones 2": 1900,
+      "Sala de tomografía": 700, // Mínimo
+      "Sala de Operaciones 3": 2100,
+      "Sala de Operaciones 4": 2400, // Baja
+      "Subestación eléctrica": 920 // Sube
+    }
+  ],
+
+  // Datos de Temperatura (10 a 40 °C)
+  TEMPERATURE: [
+    {
+      "hours": "02:28 PM",
+      "date": "2025-11-19",
+      "Sala UPS": 32.5, // Alto
+      "Sala de Operaciones 1": 19.0, // Bajo
+      "Sala técnica": 38.0, // Muy Alto
+      "Sala de Operaciones 2": 21.5,
+      "Sala de tomografía": 25.0,
+      "Sala de Operaciones 3": 20.0,
+      "Sala de Operaciones 4": 29.0,
+      "Subestación eléctrica": 35.5 // Alto
+    },
+    {
+      "hours": "02:58 PM",
+      "date": "2025-11-19",
+      "Sala UPS": 30.0, // Baja
+      "Sala de Operaciones 1": 22.0, // Sube
+      "Sala técnica": 39.5, // Sube
+      "Sala de Operaciones 2": 20.5, // Baja
+      "Sala de tomografía": 28.0, // Sube
+      "Sala de Operaciones 3": 21.0,
+      "Sala de Operaciones 4": 27.5, // Baja
+      "Subestación eléctrica": 36.0
+    },
+    {
+      "hours": "03:28 PM",
+      "date": "2025-11-19",
+      "Sala UPS": 28.5,
+      "Sala de Operaciones 1": 24.5,
+      "Sala técnica": 37.0, // Baja
+      "Sala de Operaciones 2": 18.0, // Baja
+      "Sala de tomografía": 31.0, // Sube
+      "Sala de Operaciones 3": 23.5, // Sube
+      "Sala de Operaciones 4": 25.0, // Baja
+      "Subestación eléctrica": 34.0 // Baja
+    },
+    {
+      "hours": "03:58 PM",
+      "date": "2025-11-19",
+      "Sala UPS": 31.0, // Sube
+      "Sala de Operaciones 1": 26.0,
+      "Sala técnica": 39.9, // Pico
+      "Sala de Operaciones 2": 19.5,
+      "Sala de tomografía": 29.0, // Baja
+      "Sala de Operaciones 3": 25.0,
+      "Sala de Operaciones 4": 26.5,
+      "Subestación eléctrica": 35.0
+    },
+    {
+      "hours": "04:28 PM",
+      "date": "2025-11-19",
+      "Sala UPS": 33.0,
+      "Sala de Operaciones 1": 23.0, // Baja
+      "Sala técnica": 35.5, // Baja
+      "Sala de Operaciones 2": 22.5, // Sube
+      "Sala de tomografía": 26.5, // Baja
+      "Sala de Operaciones 3": 26.0,
+      "Sala de Operaciones 4": 24.0, // Baja
+      "Subestación eléctrica": 33.5
+    },
+    {
+      "hours": "04:58 PM",
+      "date": "2025-11-19",
+      "Sala UPS": 30.5, // Baja
+      "Sala de Operaciones 1": 20.0, // Baja
+      "Sala técnica": 33.0,
+      "Sala de Operaciones 2": 25.0,
+      "Sala de tomografía": 24.0,
+      "Sala de Operaciones 3": 27.5,
+      "Sala de Operaciones 4": 22.0, // Baja
+      "Subestación eléctrica": 32.0
+    },
+    {
+      "hours": "05:28 PM",
+      "date": "2025-11-19",
+      "Sala UPS": 28.0,
+      "Sala de Operaciones 1": 17.0, // Mínimo
+      "Sala técnica": 30.0,
+      "Sala de Operaciones 2": 27.0, // Sube
+      "Sala de tomografía": 21.0,
+      "Sala de Operaciones 3": 29.0, // Sube
+      "Sala de Operaciones 4": 20.0,
+      "Subestación eléctrica": 30.5
+    }
+  ],
+
+  // Datos de Humedad (20 a 80 %)
+  HUMIDITY: [
+    {
+      "hours": "02:28 PM",
+      "date": "2025-11-19",
+      "Sala UPS": 75, // Alto
+      "Sala de Operaciones 1": 40, // Bajo
+      "Sala técnica": 25, // Mínimo
+      "Sala de Operaciones 2": 50,
+      "Sala de tomografía": 65,
+      "Sala de Operaciones 3": 45,
+      "Sala de Operaciones 4": 30,
+      "Subestación eléctrica": 70
+    },
+    {
+      "hours": "02:58 PM",
+      "date": "2025-11-19",
+      "Sala UPS": 78, // Sube
+      "Sala de Operaciones 1": 35, // Baja
+      "Sala técnica": 28, // Sube
+      "Sala de Operaciones 2": 55, // Sube
+      "Sala de tomografía": 60, // Baja
+      "Sala de Operaciones 3": 50,
+      "Sala de Operaciones 4": 35,
+      "Subestación eléctrica": 73
+    },
+    {
+      "hours": "03:28 PM",
+      "date": "2025-11-19",
+      "Sala UPS": 70, // Baja
+      "Sala de Operaciones 1": 30, // Mínimo
+      "Sala técnica": 35, // Sube
+      "Sala de Operaciones 2": 60,
+      "Sala de tomografía": 55,
+      "Sala de Operaciones 3": 55,
+      "Sala de Operaciones 4": 40,
+      "Subestación eléctrica": 68 // Baja
+    },
+    {
+      "hours": "03:58 PM",
+      "date": "2025-11-19",
+      "Sala UPS": 65,
+      "Sala de Operaciones 1": 45, // Sube
+      "Sala técnica": 42, // Sube
+      "Sala de Operaciones 2": 65,
+      "Sala de tomografía": 50,
+      "Sala de Operaciones 3": 60, // Sube
+      "Sala de Operaciones 4": 48, // Sube
+      "Subestación eléctrica": 62
+    },
+    {
+      "hours": "04:28 PM",
+      "date": "2025-11-19",
+      "Sala UPS": 60,
+      "Sala de Operaciones 1": 55,
+      "Sala técnica": 50,
+      "Sala de Operaciones 2": 70, // Sube
+      "Sala de tomografía": 45, // Baja
+      "Sala de Operaciones 3": 65,
+      "Sala de Operaciones 4": 55,
+      "Subestación eléctrica": 55 // Baja
+    },
+    {
+      "hours": "04:58 PM",
+      "date": "2025-11-19",
+      "Sala UPS": 55,
+      "Sala de Operaciones 1": 65,
+      "Sala técnica": 58,
+      "Sala de Operaciones 2": 78, // Casi pico
+      "Sala de tomografía": 40, // Baja
+      "Sala de Operaciones 3": 70,
+      "Sala de Operaciones 4": 65,
+      "Subestación eléctrica": 50
+    },
+    {
+      "hours": "05:28 PM",
+      "date": "2025-11-19",
+      "Sala UPS": 50,
+      "Sala de Operaciones 1": 75, // Pico
+      "Sala técnica": 65,
+      "Sala de Operaciones 2": 80, // Máximo
+      "Sala de tomografía": 35, // Bajo
+      "Sala de Operaciones 3": 78,
+      "Sala de Operaciones 4": 75, // Sube
+      "Subestación eléctrica": 45 // Baja
+    }
+  ]
+};
 
 const salaKeys = [
   "Sala UPS",
@@ -224,7 +396,7 @@ export default function ChartComponent({ results, generalRoomData, indicator, un
           <ChartContainer config={chartConfig}>
             <LineChart
               accessibilityLayer
-              data={mockDataGraph}
+              data={mockData[indicator as keyof typeof mockData]}
               margin={{ top: 20, right: 0, left: 0, bottom: 0 }}
             >
               <CartesianGrid vertical={false} />
@@ -240,7 +412,7 @@ export default function ChartComponent({ results, generalRoomData, indicator, un
                 hide={false}
                 tickMargin={8}
                 dataKey="value"
-                domain={[0, domaninY * 1.4]}
+                domain={[0, domaninY * 2]}
                 tickFormatter={(a) => `${a} ${UNIT_CONVERTED[unit]}`}
                 style={{ paddingTop: '40px' }}
               />

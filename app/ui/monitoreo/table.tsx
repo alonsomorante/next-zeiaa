@@ -17,7 +17,7 @@ import { Switch } from "@/components/ui/switch"
 import { useState } from "react"
 import { useRoom } from "@/app/utils/func"
 import { usePathname, useRouter, useSearchParams } from "next/navigation"
-import { UNIT_CONVERTED } from "@/app/utils/formatter"
+import { INDICATOR_CONVERTED, UNIT_CONVERTED } from "@/app/utils/formatter"
 
 interface IndicatorStructure {
   indicator: string,
@@ -36,9 +36,12 @@ interface IndicatorStructure {
 //   status: string
 // }
 
+
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export default function TableComponent({ data }: any) {
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const searchParams = useSearchParams()
   const pathname = usePathname()
   const { replace } = useRouter()
@@ -50,6 +53,7 @@ export default function TableComponent({ data }: any) {
   const filterData = data.filter((item: IndicatorStructure) => item.indicator !== 'PIR' && item.indicator !== 'LUX')
 
   const { changeRoom } = useRoom()
+
 
   const checkedChangeFn = (roomId: number) => {
     newParams.set('room', roomId.toString())
@@ -85,7 +89,7 @@ export default function TableComponent({ data }: any) {
                     data[0].indicators.map((indicator: any) => {
                       return (
                         <TableHead key={indicator.indicator}>
-                          {indicator.indicator}
+                          {INDICATOR_CONVERTED[indicator.indicator as keyof typeof INDICATOR_CONVERTED]}
                         </TableHead>
                       )
                     })

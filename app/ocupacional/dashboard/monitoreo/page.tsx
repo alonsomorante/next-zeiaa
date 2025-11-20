@@ -41,7 +41,7 @@ export default async function Page({ searchParams }: SearchParams) {
   const firstRoom = rooms.find((room: any) => room.is_activated === true)  // eslint-disable-line @typescript-eslint/no-explicit-any
 
   const currentFirstRoom = room ? room : firstRoom.id
-  const data = await roomLastData({ roomId: currentFirstRoom })
+  // const data = await roomLastData({ roomId: currentFirstRoom })
   const roomsListReadings = await roomsList({ limit: '50' })
   const roomsId = roomsListReadings.results.map((room: Room) => room.is_activated ? { id: room.id, name: room.name } : null).filter((id: number | null) => id !== null)
   const { results } = await readingsData({ roomId: currentFirstRoom, indicator, unit })
@@ -109,22 +109,17 @@ export default async function Page({ searchParams }: SearchParams) {
   // const roomsData = await fetchAllRoomsData(roomsId)
   const lastData = await fetchAllLastData(roomsId)
 
-  console.log({
-    data,
-
-  })
 
   const { name } = rooms.find((room: Room) => room.id === Number(currentFirstRoom))
   const { status } = roomsListReadings.results.find((room: Room) => room.id === Number(currentFirstRoom))
 
-
+  console.log(lastData)
 
   const generalRoomData = await roomGeneralData({ roomId: currentFirstRoom })
 
   const devUI = generalRoomData?.devices[0]?.dev_eui
 
   // Se deben mostrar las lineas de todas las salas según el indicador que este seleccionadao. Todas las lineas temperatura por ejemplo para todas las salas que esteb seleccionadas
-
 
   return (
     <div>
