@@ -27,6 +27,22 @@ const HABITUAL_KEY = 'habitual'
 const HABITUAL_LABEL = 'Consumo Habitual'
 const HABITUAL_COLOR = '#000000'
 
+const generateColor = (index: number): string => {
+  if (index < colors.length) return colors[index]
+  const hue = (index * 137.508) % 360
+  return `hsl(${hue}, 70%, 60%)`
+}
+
+const getWeekIndex = (dateStr: string, firstDateStr: string): number => {
+  const [y1, m1, d1] = firstDateStr.split('-').map(Number)
+  const [y2, m2, d2] = dateStr.split('-').map(Number)
+  const first = new Date(Date.UTC(y1, m1 - 1, d1))
+  const current = new Date(Date.UTC(y2, m2 - 1, d2))
+  const diffMs = current.getTime() - first.getTime()
+  const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24))
+  return Math.floor(diffDays / 7)
+}
+
 const formatDateInSpanish = (dateStr: string): string => {
   const [year, month, day] = dateStr.split('-').map(Number)
   const days = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado']
@@ -107,15 +123,19 @@ export default function ComparisonGraph({ mock, category, currentIndicator }: { 
   const firstEntry = mock[0]?.[dates[0]]?.[0]
   const costUnitLabel = firstEntry?.unit || '€'
 
+  const firstNonHabitualDate = dates.find(d => d !== HABITUAL_KEY) || dates[0]
+
   const chartData = {
     labels,
-    datasets: dates.map((date, index) => {
+    datasets: dates.map((date) => {
       const isHabitual = date === HABITUAL_KEY
+      const weekIndex = isHabitual ? -1 : getWeekIndex(date, firstNonHabitualDate)
+      const color = isHabitual ? HABITUAL_COLOR : generateColor(weekIndex)
       return {
         label: date,
         data: data.map(d => d[date] as number),
-        borderColor: isHabitual ? HABITUAL_COLOR : colors[index % colors.length],
-        backgroundColor: isHabitual ? HABITUAL_COLOR : colors[index % colors.length],
+        borderColor: color,
+        backgroundColor: color,
         tension: 0.3,
         hidden: hiddenDatasets.has(date),
         borderWidth: isHabitual ? 6 : 2,
@@ -279,9 +299,11 @@ export default function ComparisonGraph({ mock, category, currentIndicator }: { 
           </button>
         </div>
         <div className="flex flex-wrap gap-4">
-          {dates.map((date, index) => {
+          {dates.map((date) => {
             const isHabitual = date === HABITUAL_KEY
             if (isHabitual) return null
+            const weekIndex = getWeekIndex(date, firstNonHabitualDate)
+            const color = generateColor(weekIndex)
             return (
               <label
                 key={date}
@@ -295,7 +317,7 @@ export default function ComparisonGraph({ mock, category, currentIndicator }: { 
                 />
                 <span
                   className="text-sm text-[#707070] font-medium"
-                  style={{ borderBottom: `3px solid ${colors[index % colors.length]}` }}
+                  style={{ borderBottom: `3px solid ${color}` }}
                 >
                   {formatDateInSpanish(date)}
                 </span>

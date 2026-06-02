@@ -266,6 +266,7 @@ async function PanelMainSection({ contextPromise }: { contextPromise: Promise<Pa
     })
   ])
 
+
   const thresholds = context.measurementPoints?.results[0]?.measurement_points?.find((mp) =>
     mp.id === Number(context.firstPoint)
   )?.energy_thresholds?.thresholds_values as VoltageByDay | undefined

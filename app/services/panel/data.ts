@@ -43,7 +43,7 @@ const consumeGraphCached = cache(async (headquarterId: string, panelId: string, 
   'use cache'
   cacheLife('minutes')
 
-  const url = new URL(`/api/v1/headquarter/${headquarterId}/electrical_panel/${panelId}/measurement_points/${point}/readings/graph?this_month=true`, baseUrlEnergy)
+  const url = new URL(`/api/v1/headquarter/${headquarterId}/electrical_panel/${panelId}/measurement_points/${point}/readings/graph`, baseUrlEnergy)
 
   if (date_after) url.searchParams.set('date_after', date_after)
   if (date_before) url.searchParams.set('date_before', date_before)
@@ -53,6 +53,9 @@ const consumeGraphCached = cache(async (headquarterId: string, panelId: string, 
   if (category) url.searchParams.set('category', category)
   if (point) url.searchParams.set('point', point)
   if (weekday) url.searchParams.set('weekday', weekday)
+
+
+  console.log(`${url.pathname}${url.search}`)
 
   const res = await fetchWithAuthEnergy(`${url.pathname}${url.search}`, {}, token)
 

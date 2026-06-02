@@ -115,13 +115,13 @@ function DatePickerRangeLocal({ startParam, endParam, className, defaultFrom, de
 
     debounceRef.current = setTimeout(() => {
       if (fecha?.from) {
-        nextParams.set(startParam, fecha.from.toISOString())
+        nextParams.set(startParam, format(fecha.from, 'yyyy-MM-dd'))
       } else {
         nextParams.delete(startParam)
       }
 
       if (fecha?.to) {
-        nextParams.set(endParam, fecha.to.toISOString())
+        nextParams.set(endParam, format(fecha.to, 'yyyy-MM-dd'))
       } else {
         nextParams.delete(endParam)
       }

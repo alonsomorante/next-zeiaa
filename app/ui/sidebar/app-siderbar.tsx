@@ -80,7 +80,7 @@ export function AppSidebar() {
       <SidebarContent className="relative">
         <SidebarGroup>
           {
-            energyModules.map((modules, i) => {
+            energyModules?.map((modules, i) => {
               return (
                 <div key={i}>
                   <SidebarGroupLabel>{modules.name}</SidebarGroupLabel>
