@@ -63,8 +63,9 @@ interface DatePickerRangeLocalProps {
 
 function parseISOorUndefined(s?: string | null): Date | undefined {
   if (!s) return undefined
-  const t = Date.parse(s)
-  return isNaN(t) ? undefined : new Date(t)
+  const [year, month, day] = s.split('-').map(Number)
+  if (isNaN(year) || isNaN(month) || isNaN(day)) return undefined
+  return new Date(year, month - 1, day)
 }
 
 function formatNumberWithCommas(num?: number): string {
@@ -87,17 +88,19 @@ function DatePickerRangeLocal({ startParam, endParam, className, defaultFrom, de
     to: parseISOorUndefined(end) || defaultTo,
   })
 
+  const userChangedRef = React.useRef(false)
+
   React.useEffect(() => {
     const newFrom = parseISOorUndefined(start) || defaultFrom
     const newTo = parseISOorUndefined(end) || defaultTo
 
     setFecha((prev) => {
-      const prevFromISO = prev?.from?.toISOString()
-      const prevToISO = prev?.to?.toISOString()
-      const newFromISO = newFrom?.toISOString()
-      const newToISO = newTo?.toISOString()
+      const prevFromStr = prev?.from ? format(prev.from, 'yyyy-MM-dd') : undefined
+      const prevToStr = prev?.to ? format(prev.to, 'yyyy-MM-dd') : undefined
+      const newFromStr = newFrom ? format(newFrom, 'yyyy-MM-dd') : undefined
+      const newToStr = newTo ? format(newTo, 'yyyy-MM-dd') : undefined
 
-      if (prevFromISO === newFromISO && prevToISO === newToISO) {
+      if (prevFromStr === newFromStr && prevToStr === newToStr) {
         return prev
       }
       return { from: newFrom, to: newTo }
@@ -106,7 +109,15 @@ function DatePickerRangeLocal({ startParam, endParam, className, defaultFrom, de
 
   const debounceRef = React.useRef<ReturnType<typeof setTimeout> | undefined>(undefined)
 
+  const handleFechaChange = (newFecha: DateRange | undefined) => {
+    setFecha(newFecha)
+    userChangedRef.current = true
+  }
+
   React.useEffect(() => {
+    if (!userChangedRef.current) return
+    userChangedRef.current = false
+
     const nextParams = new URLSearchParams(searchParams?.toString() ?? "")
     if (fecha?.from || fecha?.to) {
       nextParams.delete("page")
@@ -180,7 +191,7 @@ function DatePickerRangeLocal({ startParam, endParam, className, defaultFrom, de
             mode="range"
             defaultMonth={fecha?.from}
             selected={fecha}
-            onSelect={setFecha}
+            onSelect={handleFechaChange}
             numberOfMonths={2}
             locale={es}
             className="rounded-lg border shadow-sm"
