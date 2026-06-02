@@ -23,6 +23,8 @@ interface MeasurementPoint {
   id: number
   measurement_point_name: string
   power: number
+  power_avg?: number
+  power_peak?: number
 }
 
 interface PowerReading {
@@ -66,7 +68,8 @@ interface Panel {
 
 export default function PowerUsageChart({ readings, group, powers, panel }: { readings: MonitoringResponse, group?: string, powers: Powers[], panel?: Panel }) {
 
-  const { power_contracted, power_max } = readings?.power_thresholds ?? {}
+
+  const { power_contracted, power_max, power_installed } = readings?.power_thresholds ?? {}
   const results = readings?.results ?? []
 
   const [isPending, startTransition] = useTransition()
@@ -77,6 +80,16 @@ export default function PowerUsageChart({ readings, group, powers, panel }: { re
   const dataPoints = results?.map((item: PowerReading) => ({
     x: new Date(item?.created_at).toISOString(),
     y: item.values_per_channel?.[0].power,
+  })) || []
+
+  const dataPointsAvg = results?.map((item: PowerReading) => ({
+    x: new Date(item?.created_at).toISOString(),
+    y: item.values_per_channel?.[0].power_avg,
+  })) || []
+
+  const dataPointsPeak = results?.map((item: PowerReading) => ({
+    x: new Date(item?.created_at).toISOString(),
+    y: item.values_per_channel?.[0].power_peak,
   })) || []
 
   const handleGroupChange = (group: string) => {
@@ -93,18 +106,42 @@ export default function PowerUsageChart({ readings, group, powers, panel }: { re
     })
   }
 
+  const isDayMode = group === 'day'
+  const measurementPointName = results?.[0]?.values_per_channel?.[0]?.measurement_point_name
+
   const data = {
-    datasets: [
-      {
-        label: results?.[0]?.values_per_channel?.[0]?.measurement_point_name,
-        data: dataPoints,
-        fill: false,
-        borderColor: "#00b0c7",
-        stepped: false,
-        tension: 0,
-        pointRadius: 0,
-      },
-    ],
+    datasets: isDayMode
+      ? [
+        {
+          label: `Potencia promedio - ${measurementPointName}`,
+          data: dataPointsAvg,
+          fill: false,
+          borderColor: "#00b0c7",
+          stepped: false,
+          tension: 0,
+          pointRadius: 0,
+        },
+        {
+          label: `Potencia máxima - ${measurementPointName}`,
+          data: dataPointsPeak,
+          fill: false,
+          borderColor: "#EF4444",
+          stepped: false,
+          tension: 0,
+          pointRadius: 0,
+        },
+      ]
+      : [
+        {
+          label: measurementPointName,
+          data: dataPoints,
+          fill: false,
+          borderColor: "#00b0c7",
+          stepped: false,
+          tension: 0,
+          pointRadius: 0,
+        },
+      ],
   }
 
   const isHourMode = group === 'minute'
@@ -120,7 +157,7 @@ export default function PowerUsageChart({ readings, group, powers, panel }: { re
     scales: {
       x: {
         type: "time" as const,
-        time: isHourMode 
+        time: isHourMode
           ? { unit: 'hour' as const, displayFormats: { hour: 'HH:mm' as const } }
           : { unit: "day" as const },
         title: {
@@ -167,6 +204,12 @@ export default function PowerUsageChart({ readings, group, powers, panel }: { re
             }
             label += context.parsed.y.toFixed(2) + ' ' + results?.[0]?.unit
             return label
+          },
+          labelColor: function (context: any) {
+            return {
+              borderColor: context.dataset.borderColor,
+              backgroundColor: context.dataset.borderColor,
+            }
           },
         },
       },
@@ -238,6 +281,11 @@ export default function PowerUsageChart({ readings, group, powers, panel }: { re
     }
   }), [isHourMode, power_max, power_contracted, results])
 
+  console.log({
+    power_installed,
+    power_max,
+    power_contracted
+  })
   return (
     <div className="w-full p-6">
       <div className="flex justify-end">
@@ -269,7 +317,7 @@ export default function PowerUsageChart({ readings, group, powers, panel }: { re
               </div>
             </div>
           </div>
-          <ContractedPowerSidebar panel={panel!} powers={powers} />
+          <ContractedPowerSidebar panel={panel!} powers={powers} power_installed={power_installed} power_max={power_max} power_contracted={power_contracted} />
         </div>
         <div className="flex-1 h-[740px] w-full min-w-0 flex justify-center items-center">
           {
