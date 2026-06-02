@@ -15,7 +15,7 @@ export const maxDuration = 60
 
 async function MonitoreoContent({ searchParams }: SearchParams) {
 
-  const { headquarter, panel, date_after = new Date(), date_before = new Date(), group_by = 'minute' } = await searchParams
+  const { headquarter, panel, date_after = new Date(), date_before = new Date(), group_by = 'day' } = await searchParams
 
   const authToken = await getToken()
 

@@ -281,11 +281,6 @@ export default function PowerUsageChart({ readings, group, powers, panel }: { re
     }
   }), [isHourMode, power_max, power_contracted, results])
 
-  console.log({
-    power_installed,
-    power_max,
-    power_contracted
-  })
   return (
     <div className="w-full p-6">
       <div className="flex justify-end">
