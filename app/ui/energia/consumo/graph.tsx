@@ -266,7 +266,8 @@ const SimpleLineChart = ({ readingsGraph, category, indicator, last_by, readings
           }
         },
         grid: { color: '#e5e7eb' },
-        ticks: { font: { size: 12 } }
+        ticks: { font: { size: 12 } },
+        offset: chartType === 'bar',
       },
       y: {
         grid: { color: '#e5e7eb' },
@@ -276,6 +277,12 @@ const SimpleLineChart = ({ readingsGraph, category, indicator, last_by, readings
             return `${val.toFixed(0)} ${unit}`
           }
         }
+      }
+    },
+    datasets: {
+      bar: {
+        barThickness: isSameDay ? 8 : 20,
+        maxBarThickness: isSameDay ? 12 : 30,
       }
     },
     plugins: {
